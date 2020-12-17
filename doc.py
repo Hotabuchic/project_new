@@ -3,6 +3,7 @@ import datetime as dt
 from PyQt5.QtWidgets import QDialog, QDesktopWidget, QTableWidget
 
 from database import DataBase
+from info_for_doc import Information
 
 
 class DocWidget(QDialog):
@@ -19,6 +20,21 @@ class DocWidget(QDialog):
         self.table_trans = {'Sunday': 'Вс', 'Monday': 'Пн', 'Tuesday': 'Вт', 'Wednesday': 'Ср', 'Thursday': 'Чт',
                             'Friday': 'Пт', 'Saturday': 'Сб'}
         self.setTableDates()
+        self.table.cellChanged.connect(self.info)
+        # ЗАМЕНИТЬ ПОТОМ НА cellClicked
+
+    def info(self):
+        if self.table.currentItem() is not None:
+            data = self.table.currentItem().text().split(",")
+            print(data[0], data[1], data[2])
+            info = Information(data[0], data[1], data[2])
+            info.show()
+            info.exec()
+            # В ячейке где кто то записан должно быть написано его ФИ, время и день
+            # Формат записи должен быть такой: Иванов Иван, 08:30-08:45, 20 Dec
+            # ОЧЕНЬ ЖЕЛАТЕЛЬНО ЧТОБЫ ВРЕМЯ И ДЕНЬ НЕ БЫЛО ВИДНО В ТАБЛИЦЕ
+            # Ячейка где кто то записан должна быть закрашена красным, свободная - зеленым,
+            # А ячейка в которое время врач не работает - серым цветом
 
     def setTableTime(self):
         time_list = self.database.get_data("doctors", "Monday, Tuesday, Wednesday,"
