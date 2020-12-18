@@ -1,6 +1,7 @@
 import datetime as dt
 
-from PyQt5.QtWidgets import QDialog, QDesktopWidget, QTableWidget
+from PyQt5.QtWidgets import QDialog, QDesktopWidget, QTableWidget, QTableWidgetItem
+from PyQt5.QtGui import QColor
 
 from database import DataBase
 from info_for_doc import Information
@@ -10,24 +11,25 @@ class DocWidget(QDialog):
     def __init__(self, doc_id):
         super().__init__()
         self.docId = doc_id
-        size = (QDesktopWidget().availableGeometry().width(), QDesktopWidget().availableGeometry().height())
+        size = (QDesktopWidget().availableGeometry().width(),
+                QDesktopWidget().availableGeometry().height())
         self.resize(*size)
         self.table = QTableWidget(self)
         self.table.resize(1100, size[1] - 30)
         self.table.setColumnCount(14)
         self.database = DataBase()
         self.setTableTime()
-        self.table_trans = {'Sunday': 'Вс', 'Monday': 'Пн', 'Tuesday': 'Вт', 'Wednesday': 'Ср', 'Thursday': 'Чт',
-                            'Friday': 'Пт', 'Saturday': 'Сб'}
+        self.table_trans = {'Sunday': 'Вс', 'Monday': 'Пн', 'Tuesday': 'Вт', 'Wednesday': 'Ср',
+                            'Thursday': 'Чт', 'Friday': 'Пт', 'Saturday': 'Сб'}
         self.setTableDates()
-        self.table.cellChanged.connect(self.info)
+        self.table.cellClicked.connect(self.info)
         # ЗАМЕНИТЬ ПОТОМ НА cellClicked
 
     def info(self):
         if self.table.currentItem() is not None:
-            data = self.table.currentItem().text().split(",")
+            data = self.table.currentItem().text().split(", ")
             print(data[0], data[1], data[2])
-            info = Information(data[0], data[1], data[2])
+            info = Information(data[0], data[1], data[2], self.docId)
             info.show()
             info.exec()
             # В ячейке где кто то записан должно быть написано его ФИ, время и день
@@ -54,18 +56,22 @@ class DocWidget(QDialog):
 
         self.table.setRowCount((maxx - minn) * 60 // time_of_rec)
         start = dt.datetime.combine(dt.date.today(), dt.time(hour=minn))
-        times = []
-        for i in range((maxx - minn) * 60 // time_of_rec):
+        self.times = []
+        self.count = (maxx - minn) * 60 // time_of_rec
+        for i in range(self.count):
             delta = dt.timedelta(minutes=time_of_rec)
             timee = start.strftime('%H:%M') + '-' + (start + delta).strftime('%H:%M')
             start += delta
-            times.append(timee)
-        self.table.setVerticalHeaderLabels(times)
+            self.times.append(timee)
+        self.table.setVerticalHeaderLabels(self.times)
         # заполнение времени
 
     def setTableDates(self):
         now = dt.date.today()
         lst = []
+        con = DataBase()
+        recordings = con.get_data("appointments", criterion="id_doctors = ?",
+                                  data_criterion=(self.docId,))
         for i in range(14):
             delta = dt.timedelta(days=i)
             var = now + delta
@@ -73,6 +79,25 @@ class DocWidget(QDialog):
             print(self.database.get_data("doctors", wd, "id=?", (self.docId,))[0])
             wd = self.table_trans[wd]
             lst.append(wd + var.strftime(',  %d %b'))
+            if len(recordings) != 0:
+                for j in range(self.count):
+                    recording = con.get_data("appointments, patients",
+                                             "patients.surname, patients.name",
+                                             "appointments.time = ? AND appointments.day = ?"
+                                             " AND appointments.id_patients"
+                                             " = (SELECT id FROM patients)",
+                                             (self.times[j], lst[i].split()[1]
+                                              + " " + lst[i].split()[2]))
+                    if len(recording) != 0:
+                        recording = recording[0]
+                        item = recording[0] + " " + recording[1] + ", " + self.times[j] + \
+                               ", " + lst[i].split()[1] + " " + lst[i].split()[2]
+                        self.table.setItem(j, i, QTableWidgetItem(item))
+                        self.table.item(j, i).setBackground(QColor("red"))
+                    else:
+                        self.table.setItem(j, i, QTableWidgetItem(" "))
+                        self.table.item(j, i).setBackground(QColor("green"))
+
         self.table.setHorizontalHeaderLabels(lst)
 
     def color(self, table, i, color):
