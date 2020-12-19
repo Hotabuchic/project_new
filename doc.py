@@ -1,10 +1,12 @@
 import datetime as dt
-
 from PyQt5.QtWidgets import QDialog, QDesktopWidget, QTableWidget, QTableWidgetItem
 from PyQt5.QtGui import QColor
 
 from database import DataBase
 from info_for_doc import Information
+from random import randint
+
+COLORS = [QColor(0, 213, 124), QColor(255, 252, 121), QColor(0, 150, 255), QColor(148, 55, 255)]
 
 
 class DocWidget(QDialog):
@@ -23,12 +25,12 @@ class DocWidget(QDialog):
                             'Thursday': 'Чт', 'Friday': 'Пт', 'Saturday': 'Сб'}
         self.setTableDates()
         self.table.cellClicked.connect(self.info)
+        self.table.resizeColumnsToContents()
         # ЗАМЕНИТЬ ПОТОМ НА cellClicked
 
     def info(self):
-        if self.table.currentItem() is not None:
+        if self.table.currentItem().text() != ' ':
             data = self.table.currentItem().text().split(", ")
-            print(data[0], data[1], data[2])
             info = Information(data[0], data[1], data[2], self.docId)
             info.show()
             info.exec()
@@ -76,7 +78,6 @@ class DocWidget(QDialog):
             delta = dt.timedelta(days=i)
             var = now + delta
             wd = var.strftime('%A')
-            print(self.database.get_data("doctors", wd, "id=?", (self.docId,))[0])
             wd = self.table_trans[wd]
             lst.append(wd + var.strftime(',  %d %b'))
             if len(recordings) != 0:
@@ -93,18 +94,13 @@ class DocWidget(QDialog):
                         item = recording[0] + " " + recording[1] + ", " + self.times[j] + \
                                ", " + lst[i].split()[1] + " " + lst[i].split()[2]
                         self.table.setItem(j, i, QTableWidgetItem(item))
-                        self.table.item(j, i).setBackground(QColor("red"))
+                        self.table.item(j, i).setBackground(COLORS[randint(0, len(COLORS) - 1)])
                     else:
                         self.table.setItem(j, i, QTableWidgetItem(" "))
-                        self.table.item(j, i).setBackground(QColor("green"))
+                        self.table.item(j, i).setBackground(QColor(192, 192, 192))
 
         self.table.setHorizontalHeaderLabels(lst)
 
     def color(self, table, i, color):
         for j in range(table.columnCount()):
             table.item(i, j).setBackground(color)
-
-# app = QApplication(sys.argv)
-# ex = DocWidget(2)
-# ex.show()
-# sys.exit(app.exec())

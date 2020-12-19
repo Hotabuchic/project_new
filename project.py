@@ -205,20 +205,20 @@ class Window(QMainWindow):
                         break
                     elif self.login_doc.output_password.text() != "":
                         self.login_doc.error.setText("Неверный пароль!!!")
-                        self.login_doc.error.setStyleSheet("background-color : red")
+                        self.login_doc.error.setStyleSheet("color : red")
                         break
                     else:
                         self.login_doc.error.setText("Введите пароль!!!")
-                        self.login_doc.error.setStyleSheet("background-color : red")
+                        self.login_doc.error.setStyleSheet("color : red")
                         break
                     # Проверка поля "Пароль" на корректность данных
 
             else:
                 self.login_doc.error.setText("Неверный логин!!!")
-                self.login_doc.error.setStyleSheet("background-color : red")
+                self.login_doc.error.setStyleSheet("color : red")
         else:
             self.login_doc.error.setText("Введите логин!!!")
-            self.login_doc.error.setStyleSheet("background-color : red")
+            self.login_doc.error.setStyleSheet("color : red")
 
     def load_data_for_doc(self, id_doc):
         doc = DocWidget(id_doc)
