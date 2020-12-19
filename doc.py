@@ -34,7 +34,7 @@ class DocWidget(QDialog):
             info = Information(data[0], data[1], data[2], self.docId)
             info.show()
             info.exec()
-            # В ячейке где кто то записан должно быть написано его ФИ, время и день
+            # В ячейке где кто-то записан должно быть написано его ФИ, время и день
             # Формат записи должен быть такой: Иванов Иван, 08:30-08:45, 20 Dec
             # ОЧЕНЬ ЖЕЛАТЕЛЬНО ЧТОБЫ ВРЕМЯ И ДЕНЬ НЕ БЫЛО ВИДНО В ТАБЛИЦЕ
             # Ячейка где кто то записан должна быть закрашена красным, свободная - зеленым,
@@ -45,6 +45,7 @@ class DocWidget(QDialog):
                                                       " Thursday, Friday, Saturday, Sunday",
                                            "id=?", (self.docId,))[0]
         time_of_rec = self.database.get_data("doctors", "rec_time", "id=?", (self.docId,))[0][0]
+        self.time_of_rec = time_of_rec
         minn = 25
         maxx = -1
         time_list = list(time_list)
@@ -55,7 +56,7 @@ class DocWidget(QDialog):
                 minn = int(i.split('-')[0])
             if int(i.split('-')[1]) > maxx:
                 maxx = int(i.split('-')[1])
-
+        self.min_time, self.max_time = minn, maxx
         self.table.setRowCount((maxx - minn) * 60 // time_of_rec)
         start = dt.datetime.combine(dt.date.today(), dt.time(hour=minn))
         self.times = []
@@ -80,6 +81,8 @@ class DocWidget(QDialog):
             wd = var.strftime('%A')
             wd = self.table_trans[wd]
             lst.append(wd + var.strftime(',  %d %b'))
+            rasp = con.get_data('doctors', var.strftime('%A'), f'id={self.docId}')[0][0]
+            minn, maxx = [int(i) for i in rasp.split('-')]
             if len(recordings) != 0:
                 for j in range(self.count):
                     recording = con.get_data("appointments, patients",
@@ -94,10 +97,14 @@ class DocWidget(QDialog):
                         item = recording[0] + " " + recording[1] + ", " + self.times[j] + \
                                ", " + lst[i].split()[1] + " " + lst[i].split()[2]
                         self.table.setItem(j, i, QTableWidgetItem(item))
-                        self.table.item(j, i).setBackground(COLORS[randint(0, len(COLORS) - 1)])
                     else:
                         self.table.setItem(j, i, QTableWidgetItem(" "))
+
+                    if not (j in range((minn - self.min_time) * 60 // self.time_of_rec)) and not (
+                            j > (- self.min_time + maxx) * 60 // self.time_of_rec - 1):
                         self.table.item(j, i).setBackground(QColor(192, 192, 192))
+                    if self.table.item(j, i).text() != ' ':
+                        self.table.item(j, i).setBackground(COLORS[randint(0, len(COLORS) - 1)])
 
         self.table.setHorizontalHeaderLabels(lst)
 

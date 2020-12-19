@@ -51,21 +51,21 @@ class Window(QMainWindow):
             if self.reg_patients.surname.text() == "":
                 self.reg_patients.error.resize(100, 16)
                 self.reg_patients.error.setText("Введите фамилию!")
-                self.reg_patients.error.setStyleSheet("background-color : red")
+                self.reg_patients.error.setStyleSheet("color : red")
                 return
                 # Проверка поля "Фамилия" на наличие данных
 
             elif self.reg_patients.name.text() == "":
                 self.reg_patients.error.resize(70, 16)
                 self.reg_patients.error.setText("Введите имя!")
-                self.reg_patients.error.setStyleSheet("background-color : red")
+                self.reg_patients.error.setStyleSheet("color : red")
                 return
                 # Проверка поля "Имя" на наличие данных
 
             elif self.reg_patients.phone.text() == "":
                 self.reg_patients.error.resize(100, 16)
                 self.reg_patients.error.setText("Введите телефон!")
-                self.reg_patients.error.setStyleSheet("background-color : red")
+                self.reg_patients.error.setStyleSheet("color : red")
                 return
                 # Проверка поля "Телефон" на наличие данных
 
@@ -75,35 +75,35 @@ class Window(QMainWindow):
             if self.reg_patients.address.text() == "":
                 self.reg_patients.error.resize(85, 16)
                 self.reg_patients.error.setText("Введите адрес!")
-                self.reg_patients.error.setStyleSheet("background-color : red")
+                self.reg_patients.error.setStyleSheet("color : red")
                 return
                 # Проверка поля "Адрес" на наличие данных
 
             elif self.reg_patients.login.text() == "":
                 self.reg_patients.error.resize(85, 16)
                 self.reg_patients.error.setText("Введите логин!")
-                self.reg_patients.error.setStyleSheet("background-color : red")
+                self.reg_patients.error.setStyleSheet("color : red")
                 return
                 # Проверка поля "Логин" на наличие данных
 
             elif any([self.reg_patients.login.text().strip() == str(i[1]) for i in self.auth_patients]):
                 self.reg_patients.error.resize(150, 16)
                 self.reg_patients.error.setText("Такой логин уже занят!")
-                self.reg_patients.error.setStyleSheet("background-color : red")
+                self.reg_patients.error.setStyleSheet("color : red")
                 return
                 # Проверка данных поля "Логин" на совпадение в бд
 
             elif self.reg_patients.password.text() == "":
                 self.reg_patients.error.resize(90, 16)
                 self.reg_patients.error.setText("Введите пароль!")
-                self.reg_patients.error.setStyleSheet("background-color : red")
+                self.reg_patients.error.setStyleSheet("color : red")
                 return
                 # Проверка поля "Пароль" на наличие данных
 
             elif self.reg_patients.password2.text() == "":
                 self.reg_patients.error.resize(150, 16)
                 self.reg_patients.error.setText("Введите пароль повторно!")
-                self.reg_patients.error.setStyleSheet("background-color : red")
+                self.reg_patients.error.setStyleSheet("color : red")
                 return
                 # Проверка поля "Повторите пароль" на наличие данных
 
@@ -113,7 +113,7 @@ class Window(QMainWindow):
             if self.reg_patients.password.text() != self.reg_patients.password2.text():
                 self.reg_patients.error.resize(120, 16)
                 self.reg_patients.error.setText("Пароли не совпадают!")
-                self.reg_patients.error.setStyleSheet("background-color : red")
+                self.reg_patients.error.setStyleSheet("color : red")
                 # Сравнение поля "Пароль" и поля "Повторите пароль"
 
             else:
@@ -139,7 +139,7 @@ class Window(QMainWindow):
         except Exception as exc:
             self.reg_patients.error.resize(len(str(exc)) * 6 - 5, 16)
             self.reg_patients.error.setText(str(exc))
-            self.reg_patients.error.setStyleSheet("background-color : red")
+            self.reg_patients.error.setStyleSheet("color : red")
             # Отлавливаем ошибки
 
     def login_for_patients(self):
@@ -157,27 +157,26 @@ class Window(QMainWindow):
                 id, login, password = patients
                 if self.login_patients.output_login.text() == str(login):
                     # Проверка поля "Логин" на корректность данных
-
                     if self.login_patients.output_password.text() == str(password):
                         self.login_patients.close()
                         self.load_data_for_patients(id_patients=id)
                         break
                     elif self.login_patients.output_password.text() != "":
                         self.login_patients.error.setText("Неверный пароль!!!")
-                        self.login_patients.error.setStyleSheet("background-color : red")
+                        self.login_patients.error.setStyleSheet("color : red")
                         break
                     else:
                         self.login_patients.error.setText("Введите пароль!!!")
-                        self.login_patients.error.setStyleSheet("background-color : red")
+                        self.login_patients.error.setStyleSheet("color : red")
                         break
                     # Проверка поля "Пароль" на корректность данных
 
             else:
                 self.login_patients.error.setText("Неверный логин!!!")
-                self.login_patients.error.setStyleSheet("background-color : red")
+                self.login_patients.error.setStyleSheet("color : red")
         else:
             self.login_patients.error.setText("Введите логин!!!")
-            self.login_patients.error.setStyleSheet("background-color : red")
+            self.login_patients.error.setStyleSheet("color : red")
 
     def load_data_for_patients(self, id_patients):
         pass
