@@ -24,6 +24,7 @@ class DocWidget(QDialog):
         self.table_trans = {'Sunday': 'Вс', 'Monday': 'Пн', 'Tuesday': 'Вт', 'Wednesday': 'Ср',
                             'Thursday': 'Чт', 'Friday': 'Пт', 'Saturday': 'Сб'}
         self.setTableDates()
+        self.table.setStyleSheet('gridline-color: #6B6B6B')
         self.table.cellClicked.connect(self.info)
         self.table.resizeColumnsToContents()
         # ЗАМЕНИТЬ ПОТОМ НА cellClicked
@@ -102,7 +103,7 @@ class DocWidget(QDialog):
 
                     if not (j in range((minn - self.min_time) * 60 // self.time_of_rec)) and not (
                             j > (- self.min_time + maxx) * 60 // self.time_of_rec - 1):
-                        self.table.item(j, i).setBackground(QColor(192, 192, 192))
+                        self.table.item(j, i).setBackground(QColor(235, 235, 235))
                     if self.table.item(j, i).text() != ' ':
                         self.table.item(j, i).setBackground(COLORS[randint(0, len(COLORS) - 1)])
 

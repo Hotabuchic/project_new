@@ -33,7 +33,6 @@ class Information(QDialog):
                                       " AND time=? AND day=? AND id_doctors=?",
                                       (name.split()[0], name.split()[1], time, day, doc_id))[0][0]
         self.complaint = QTextEdit(self)
-        print(complaint)
         self.complaint.setText(complaint)
         self.complaint.move(10, 140)
 
