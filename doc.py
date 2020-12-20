@@ -76,8 +76,6 @@ class DocWidget(QDialog):
         now = dt.date.today()
         lst = []
         con = DataBase()
-        recordings = con.get_data("appointments", criterion="id_doctors = ?",
-                                  data_criterion=(self.docId,))
         for i in range(15):
             delta = dt.timedelta(days=i)
             var = now + delta
@@ -86,28 +84,27 @@ class DocWidget(QDialog):
             lst.append(wd + var.strftime(',  %d %b'))
             rasp = con.get_data('doctors', var.strftime('%A'), f'id={self.docId}')[0][0]
             minn, maxx = [int(i) for i in rasp.split('-')]
-            if len(recordings) != 0:
-                for j in range(self.count):
-                    recording = con.get_data("appointments, patients",
-                                             "patients.surname, patients.name",
-                                             "appointments.time = ? AND appointments.day = ?"
-                                             " AND appointments.id_patients"
-                                             " = (SELECT id FROM patients)",
-                                             (self.times[j], lst[i].split()[1]
-                                              + " " + lst[i].split()[2]))
-                    if len(recording) != 0:
-                        recording = recording[0]
-                        item = recording[0] + " " + recording[1] + ", " + self.times[j] + \
-                               ", " + lst[i].split()[1] + " " + lst[i].split()[2]
-                        self.table.setItem(j, i, QTableWidgetItem(item))
-                    else:
-                        self.table.setItem(j, i, QTableWidgetItem(" "))
+            for j in range(self.count):
+                recording = con.get_data("appointments, patients",
+                                         "patients.surname, patients.name",
+                                         "appointments.time = ? AND appointments.day = ?"
+                                         " AND appointments.id_patients"
+                                         " = (SELECT id FROM patients)",
+                                         (self.times[j], lst[i].split()[1]
+                                          + " " + lst[i].split()[2]))
+                if len(recording) != 0:
+                    recording = recording[0]
+                    item = recording[0] + " " + recording[1] + ", " + self.times[j] + \
+                           ", " + lst[i].split()[1] + " " + lst[i].split()[2]
+                    self.table.setItem(j, i, QTableWidgetItem(item))
+                else:
+                    self.table.setItem(j, i, QTableWidgetItem(" "))
 
-                    if not (j in range((minn - self.min_time) * 60 // self.time_of_rec)) and not (
-                            j > (- self.min_time + maxx) * 60 // self.time_of_rec - 1):
-                        self.table.item(j, i).setBackground(QColor(235, 235, 235))
-                    if self.table.item(j, i).text() != ' ':
-                        self.table.item(j, i).setBackground(COLORS[randint(0, len(COLORS) - 1)])
+                if not (j in range((minn - self.min_time) * 60 // self.time_of_rec)) and not (
+                        j > (- self.min_time + maxx) * 60 // self.time_of_rec - 1):
+                    self.table.item(j, i).setBackground(QColor(235, 235, 235))
+                if self.table.item(j, i).text() != ' ':
+                    self.table.item(j, i).setBackground(COLORS[randint(0, len(COLORS) - 1)])
         self.table.setHorizontalHeaderLabels(lst)
         for i in range(15):
             self.table.horizontalHeaderItem(i).setBackground(QColor(245, 245, 245))
