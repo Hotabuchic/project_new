@@ -18,7 +18,7 @@ class DocWidget(QDialog):
         self.resize(*size)
         self.table = QTableWidget(self)
         self.table.resize(1100, size[1] - 30)
-        self.table.setColumnCount(14)
+        self.table.setColumnCount(15)
         self.database = DataBase()
         self.setTableTime()
         self.table_trans = {'Sunday': 'Вс', 'Monday': 'Пн', 'Tuesday': 'Вт', 'Wednesday': 'Ср',
@@ -68,6 +68,8 @@ class DocWidget(QDialog):
             start += delta
             self.times.append(timee)
         self.table.setVerticalHeaderLabels(self.times)
+        for i in range(len(self.times)):
+            self.table.verticalHeaderItem(i).setBackground(QColor(245, 245, 245))
         # заполнение времени
 
     def setTableDates(self):
@@ -76,7 +78,7 @@ class DocWidget(QDialog):
         con = DataBase()
         recordings = con.get_data("appointments", criterion="id_doctors = ?",
                                   data_criterion=(self.docId,))
-        for i in range(14):
+        for i in range(15):
             delta = dt.timedelta(days=i)
             var = now + delta
             wd = var.strftime('%A')
@@ -106,8 +108,9 @@ class DocWidget(QDialog):
                         self.table.item(j, i).setBackground(QColor(235, 235, 235))
                     if self.table.item(j, i).text() != ' ':
                         self.table.item(j, i).setBackground(COLORS[randint(0, len(COLORS) - 1)])
-
         self.table.setHorizontalHeaderLabels(lst)
+        for i in range(15):
+            self.table.horizontalHeaderItem(i).setBackground(QColor(245, 245, 245))
 
     def color(self, table, i, color):
         for j in range(table.columnCount()):
