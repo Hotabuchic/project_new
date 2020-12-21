@@ -10,8 +10,6 @@ class DataBase:
         self.cur = self.con.cursor()
 
         if data_criterion is not None and criterion != "":
-            print(f"SELECT {name_data} FROM {name_tables} WHERE {criterion}",
-                  data_criterion)
             request = self.cur.execute(f"SELECT {name_data} FROM {name_tables} WHERE {criterion}",
                                        data_criterion).fetchall()
             self.con.close()
