@@ -35,4 +35,5 @@ class Information(QDialog):
         self.complaint = QTextEdit(self)
         self.complaint.setText(complaint)
         self.complaint.move(10, 140)
+        self.complaint.setEnabled(False)
 
