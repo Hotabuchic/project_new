@@ -6,15 +6,15 @@ from PyQt5.QtWidgets import QDialog, QDesktopWidget, QTableWidget, QTableWidgetI
 
 from appoinment import NewAppoinment
 from database import DataBase
-from info_for_doc import Information
 
 COLORS = [QColor(0, 213, 124), QColor(255, 252, 121), QColor(0, 150, 255), QColor(148, 55, 255)]
 
 
-class DocWidget(QDialog):
-    def __init__(self, doc_id):
+class PatientsFinalWidget(QDialog):
+    def __init__(self, doc_id, patients_id):
         super().__init__()
         self.docId = doc_id
+        self.patients_id = patients_id
         size = (QDesktopWidget().availableGeometry().width(),
                 QDesktopWidget().availableGeometry().height())
         self.resize(*size)
@@ -27,7 +27,6 @@ class DocWidget(QDialog):
                             'Thursday': 'Чт', 'Friday': 'Пт', 'Saturday': 'Сб'}
         self.setTableDates()
         self.table.setStyleSheet('gridline-color: #6B6B6B')
-        self.table.cellClicked.connect(self.info)
         self.table.cellDoubleClicked.connect(self.new_appoint)
         # ЗАМЕНИТЬ ПОТОМ НА cellClicked
 
@@ -35,22 +34,10 @@ class DocWidget(QDialog):
         item = self.table.item(r, c)
         date, time = self.dates[c + 1], self.times[r]
         if item.text() == ' ' and item.background().color().name() == '#ebebeb':
-            addApp = NewAppoinment(time, date, self.docId)
+            addApp = NewAppoinment(time, date, self.docId, self.patients_id)
             addApp.show()
             addApp.exec_()
             self.setTableDates()
-
-    def info(self):
-        if self.table.currentItem().text() != ' ':
-            data = self.table.currentItem().text().split(", ")
-            info = Information(data[0], data[1], data[2], self.docId)
-            info.show()
-            info.exec()
-            # В ячейке где кто-то записан должно быть написано его ФИ, время и день
-            # Формат записи должен быть такой: Иванов Иван, 08:30-08:45, 20 Dec
-            # ОЧЕНЬ ЖЕЛАТЕЛЬНО ЧТОБЫ ВРЕМЯ И ДЕНЬ НЕ БЫЛО ВИДНО В ТАБЛИЦЕ
-            # Ячейка где кто то записан должна быть закрашена красным, свободная - зеленым,
-            # А ячейка в которое время врач не работает - серым цветом
 
     def setTableTime(self):
         time_list = self.database.get_data("doctors", "Monday, Tuesday, Wednesday,"
