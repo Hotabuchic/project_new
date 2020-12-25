@@ -92,7 +92,7 @@ class PatientsFinalWidget(QDialog):
                                          " = (SELECT id FROM patients)",
                                          (self.times[j], lst[i].split()[1]
                                           + " " + lst[i].split()[2]))
-                # СЮДА ПОДХОДЯТ ВСЕ ЗАПИСИ!!! ДАЖЕ СВОИ!!!
+                # СЮДА ПОДХОДЯТ ВСЕ ЗАПИСИ!!! ДАЖЕ СВОИ!!
                 if len(recording) != 0:
                     self.table.setItem(j, i, QTableWidgetItem("---"))
                 else:
