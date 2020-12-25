@@ -7,8 +7,6 @@ from appointment import NewAppointment
 from database import DataBase
 from info_for_doc import Information
 
-COLORS = [QColor(0, 213, 124), QColor(255, 252, 121), QColor(0, 150, 255), QColor(148, 55, 255)]
-
 
 class DocWidget(QDialog):
     def __init__(self, doc_id):
@@ -31,13 +29,7 @@ class DocWidget(QDialog):
         # ЗАМЕНИТЬ ПОТОМ НА cellClicked
 
     def new_appoint(self, r, c):
-        item = self.table.item(r, c)
-        date, time = self.dates[c + 1], self.times[r]
-        if item.text() == ' ' and item.background().color() == QColor(225, 225, 225):
-            addApp = NewAppointment(time, date, self.docId)
-            addApp.show()
-            addApp.exec_()
-            self.setTableDates()
+        print('asd')
 
     def info(self):
         if self.table.currentItem().text() != ' ':
@@ -115,8 +107,9 @@ class DocWidget(QDialog):
                 if not (j in range((minn - self.min_time) * 60 // self.time_of_rec)) and not (
                         j > (- self.min_time + maxx) * 60 // self.time_of_rec - 1):
                     self.table.item(j, i).setBackground(QColor(225, 225, 225))
+
                 if self.table.item(j, i).text() != ' ':
-                    self.table.item(j, i).setBackground(QColor(235, 235, 10))
+                    self.table.item(j, i).setBackground(QColor('#FFFC79'))
         self.table.setHorizontalHeaderLabels(lst)
         for i in range(15):
             self.table.horizontalHeaderItem(i).setBackground(QColor(245, 245, 245))
