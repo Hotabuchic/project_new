@@ -105,7 +105,6 @@ class DocWidget(QDialog):
                                          (self.times[j], lst[i].split()[1]
                                           + " " + lst[i].split()[2]))
                 if len(recording) != 0:
-                    recording = recording[0]
                     item = recording[0] + " " + recording[1] + ", " + self.times[j] + \
                            ", " + lst[i].split()[1] + " " + lst[i].split()[2]
                     self.table.setItem(j, i, QTableWidgetItem(item))
