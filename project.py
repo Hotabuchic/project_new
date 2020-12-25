@@ -10,7 +10,7 @@ from login import Login
 from password_check import check_password
 from phone_check import check_phone
 from registration import Registration
-from patients import PatientsWidget
+from choice import ChoiceWidget
 
 
 class Window(QMainWindow):
@@ -180,7 +180,7 @@ class Window(QMainWindow):
             self.login_patients.error.setStyleSheet("color : red")
 
     def load_data_for_patients(self, id_patients):
-        patients = PatientsWidget(id_patients)
+        patients = ChoiceWidget(id_patients)
         patients.show()
         patients.exec()
         # Загрузка интерфейса для пациента

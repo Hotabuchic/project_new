@@ -1,10 +1,9 @@
 import datetime as dt
-from random import randint
 
 from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import QDialog, QDesktopWidget, QTableWidget, QTableWidgetItem
 
-from appoinment import NewAppoinment
+from appointment import NewAppointment
 from database import DataBase
 from info_for_doc import Information
 
@@ -19,7 +18,7 @@ class DocWidget(QDialog):
                 QDesktopWidget().availableGeometry().height())
         self.resize(*size)
         self.table = QTableWidget(self)
-        self.table.resize(1100, size[1] - 30)
+        self.table.resize(*size)
         self.table.setColumnCount(15)
         self.database = DataBase()
         self.setTableTime()
@@ -34,8 +33,8 @@ class DocWidget(QDialog):
     def new_appoint(self, r, c):
         item = self.table.item(r, c)
         date, time = self.dates[c + 1], self.times[r]
-        if item.text() == ' ' and item.background().color().name() == '#ebebeb':
-            addApp = NewAppoinment(time, date, self.docId)
+        if item.text() == ' ' and item.background().color() == QColor(225, 225, 225):
+            addApp = NewAppointment(time, date, self.docId)
             addApp.show()
             addApp.exec_()
             self.setTableDates()
@@ -115,9 +114,9 @@ class DocWidget(QDialog):
 
                 if not (j in range((minn - self.min_time) * 60 // self.time_of_rec)) and not (
                         j > (- self.min_time + maxx) * 60 // self.time_of_rec - 1):
-                    self.table.item(j, i).setBackground(QColor(235, 235, 235))
+                    self.table.item(j, i).setBackground(QColor(225, 225, 225))
                 if self.table.item(j, i).text() != ' ':
-                    self.table.item(j, i).setBackground(COLORS[randint(0, len(COLORS) - 1)])
+                    self.table.item(j, i).setBackground(QColor(235, 235, 10))
         self.table.setHorizontalHeaderLabels(lst)
         for i in range(15):
             self.table.horizontalHeaderItem(i).setBackground(QColor(245, 245, 245))

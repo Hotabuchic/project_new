@@ -10,6 +10,7 @@ COLORS = [QColor(0, 213, 124), QColor(255, 252, 121), QColor(0, 150, 255), QColo
 class PatientsWidget(QDialog):
     def __init__(self, patients_id):
         super().__init__()
+        self.setWindowTitle("Запись на прием")
         self.patients_id = patients_id
         size = (QDesktopWidget().availableGeometry().width(),
                 QDesktopWidget().availableGeometry().height())

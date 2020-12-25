@@ -8,6 +8,7 @@ from final_patients import PatientsFinalWidget
 class CertainDoctor(QDialog):
     def __init__(self, patients_id, position):
         super().__init__()
+        self.setWindowTitle("Запись на прием")
         self.patients_id, self.position = patients_id, position
         size = (QDesktopWidget().availableGeometry().width(),
                 QDesktopWidget().availableGeometry().height())

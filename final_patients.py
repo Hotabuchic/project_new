@@ -1,10 +1,9 @@
 import datetime as dt
-from random import randint
 
 from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import QDialog, QDesktopWidget, QTableWidget, QTableWidgetItem
 
-from appoinment import NewAppoinment
+from appointment import NewAppointment
 from database import DataBase
 
 COLORS = [QColor(0, 213, 124), QColor(255, 252, 121), QColor(0, 150, 255), QColor(148, 55, 255)]
@@ -13,13 +12,14 @@ COLORS = [QColor(0, 213, 124), QColor(255, 252, 121), QColor(0, 150, 255), QColo
 class PatientsFinalWidget(QDialog):
     def __init__(self, doc_id, patients_id):
         super().__init__()
+        self.setWindowTitle("Запись на прием")
         self.docId = doc_id
         self.patients_id = patients_id
         size = (QDesktopWidget().availableGeometry().width(),
                 QDesktopWidget().availableGeometry().height())
         self.resize(*size)
         self.table = QTableWidget(self)
-        self.table.resize(1100, size[1] - 30)
+        self.table.resize(*size)
         self.table.setColumnCount(15)
         self.database = DataBase()
         self.setTableTime()
@@ -33,8 +33,8 @@ class PatientsFinalWidget(QDialog):
     def new_appoint(self, r, c):
         item = self.table.item(r, c)
         date, time = self.dates[c + 1], self.times[r]
-        if item.text() == ' ' and item.background().color().name() == '#ebebeb':
-            addApp = NewAppoinment(time, date, self.docId, self.patients_id)
+        if item.text() == ' ' and item.background().color() == QColor(225, 225, 225):
+            addApp = NewAppointment(time, date, self.docId, self.patients_id)
             addApp.show()
             addApp.exec_()
             self.setTableDates()
@@ -93,18 +93,15 @@ class PatientsFinalWidget(QDialog):
                                          (self.times[j], lst[i].split()[1]
                                           + " " + lst[i].split()[2]))
                 if len(recording) != 0:
-                    recording = recording[0]
-                    item = recording[0] + " " + recording[1] + ", " + self.times[j] + \
-                           ", " + lst[i].split()[1] + " " + lst[i].split()[2]
-                    self.table.setItem(j, i, QTableWidgetItem(item))
+                    self.table.setItem(j, i, QTableWidgetItem("  "))
                 else:
                     self.table.setItem(j, i, QTableWidgetItem(" "))
 
                 if not (j in range((minn - self.min_time) * 60 // self.time_of_rec)) and not (
                         j > (- self.min_time + maxx) * 60 // self.time_of_rec - 1):
-                    self.table.item(j, i).setBackground(QColor(235, 235, 235))
+                    self.table.item(j, i).setBackground(QColor(225, 225, 225))
                 if self.table.item(j, i).text() != ' ':
-                    self.table.item(j, i).setBackground(COLORS[randint(0, len(COLORS) - 1)])
+                    self.table.item(j, i).setBackground(QColor(235, 235, 10))
         self.table.setHorizontalHeaderLabels(lst)
         for i in range(15):
             self.table.horizontalHeaderItem(i).setBackground(QColor(245, 245, 245))
