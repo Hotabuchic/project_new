@@ -29,7 +29,20 @@ class DocWidget(QDialog):
         # ЗАМЕНИТЬ ПОТОМ НА cellClicked
 
     def new_appoint(self, r, c):
-        print('asd')
+        item = self.table.item(r, c)
+        date, time = self.dates[c + 1], self.times[r]
+        if item.text() == ' ' and item.background().color().name() == '#e1e1e1':
+            add_appointment = NewAppointment(time, date, self.docId)
+            add_appointment.show()
+            add_appointment.exec_()
+            note = self.database.get_data('appointments', '*')[-1]
+            full_name = self.database.get_data('patients', 'surname, name', f'id={note[1]}')[0]
+            full_name = ' '.join(full_name)
+            item = f'{full_name},{note[3]},{note[-1]}'
+            self.table.setItem(r, c, QTableWidgetItem(item))
+            self.table.item(r, c).setBackground(QColor(255, 252, 121))
+            self.table.resizeColumnsToContents()
+            # # Добавление записи
 
     def info(self):
         if self.table.currentItem().text() != ' ':
@@ -106,7 +119,7 @@ class DocWidget(QDialog):
 
                 if not (j in range((minn - self.min_time) * 60 // self.time_of_rec)) and not (
                         j > (- self.min_time + maxx) * 60 // self.time_of_rec - 1):
-                    self.table.item(j, i).setBackground(QColor(225, 225, 225))
+                    self.table.item(j, i).setBackground(QColor('#e1e1e1'))
 
                 if self.table.item(j, i).text() != ' ':
                     self.table.item(j, i).setBackground(QColor('#FFFC79'))
