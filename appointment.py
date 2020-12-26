@@ -1,4 +1,5 @@
-from PyQt5.QtWidgets import QDialog, QLabel, QComboBox, QPlainTextEdit, QPushButton
+from PyQt5.QtWidgets import QDialog, QLabel, QComboBox, QPlainTextEdit, \
+    QPushButton
 
 from database import DataBase
 
