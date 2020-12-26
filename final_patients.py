@@ -42,15 +42,14 @@ class PatientsFinalWidget(QDialog):
 
     def add_appointment(self):
         day = self.mini_app.date.strftime('%d %b')
-        sql = [self.mini_app.patients_combo.currentIndex() + 1, self.mini_app.docid,
+        sql = [self.patients_id, self.mini_app.docid,
                self.mini_app.appointments_input.toPlainText(), self.mini_app.time, day]
         self.mini_app.con.add_data('appointments', sql)
         self.mini_app.close()
-        self.new_cell(self.last_r, self.last_c)
+        r, c = self.last_r, self.last_c
 
-    def new_cell(self, r, c):
         note = self.database.get_data('appointments', '*')[-1]
-        full_name = self.database.get_data('patients', 'surname, name', f'id={note[0]}')[0]
+        full_name = self.database.get_data('patients', 'surname, name', f'id={self.patients_id}')[0]
         full_name = ' '.join(full_name)
         item = f'{full_name}, {note[3]}, {note[-1]}'
         self.table.setItem(r, c, QTableWidgetItem(item))

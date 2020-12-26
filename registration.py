@@ -72,7 +72,7 @@ class Registration(QtWidgets.QDialog):
         # Поле "Фамилия"
 
         self.name = QtWidgets.QLineEdit(self)
-        self.name.setGeometry(QtCore.QRect(60, 80, 300, 20))
+        self.name.setGeometry(QtCore.QRect(80, 80, 300, 20))
         # Поле "Имя"
 
         self.patronymic = QtWidgets.QLineEdit(self)
@@ -102,7 +102,7 @@ class Registration(QtWidgets.QDialog):
         # Поле "Повторите пароль"
 
         self.gender = QtWidgets.QComboBox(self)
-        self.gender.setGeometry(QtCore.QRect(50, 180, 75, 22))
+        self.gender.move(50, 180)
         self.gender.addItem("Мужской")
         self.gender.addItem("Женский")
         # Combobox для ввода пола
@@ -117,7 +117,6 @@ class Registration(QtWidgets.QDialog):
         self.label_surname.setText(_translate("self", "Фамилия"))
         self.label_name.setText(_translate("self", "Имя"))
         self.label_patronymic.setText(_translate("self", "Отчество"))
-        self.label_patronymic_help.setText(_translate("self", "(если есть)"))
         self.label_gender.setText(_translate("self", "Пол"))
         self.label_phone.setText(_translate("self", "Номер телефона"))
         self.label_address.setText(_translate("self", "Адрес"))

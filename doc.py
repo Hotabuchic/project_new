@@ -39,7 +39,6 @@ class DocWidget(QDialog):
             self.mini_app.add_appointment_btn.clicked.connect(self.add_appointment)
             # Добавление записи
 
-
     def add_appointment(self):
         day = self.mini_app.date.strftime('%d %b')
         sql = [self.mini_app.patients_combo.currentIndex() + 1, self.mini_app.docid,
