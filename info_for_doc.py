@@ -7,6 +7,7 @@ class Information(QDialog):
     def __init__(self, name, time, day, doc_id):
         super().__init__()
         self.setGeometry(300, 300, 280, 350)
+        self.setWindowTitle('Информация о записи')
 
         self.name = QLabel(self)
         self.name.setText(f'Пациент: {name}')

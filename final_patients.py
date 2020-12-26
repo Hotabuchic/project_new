@@ -31,13 +31,22 @@ class PatientsFinalWidget(QDialog):
 
     def new_appoint(self, r, c):
         item = self.table.item(r, c)
+        self.last_r, self.last_c = r, c
         date, time = self.dates[c + 1], self.times[r]
         if item.text() == ' ' and item.background().color().name() == '#e1e1e1':
-            add_appointment = NewAppointment(time, date, self.docId, self.patients_id)
-            add_appointment.show()
-            add_appointment.exec_()
-            self.new_cell(r, c)
+            self.mini_app = NewAppointment(time, date, self.docId, self.patients_id)
+            self.mini_app.show()
+            self.mini_app.add_appointment_btn.clicked.connect(self.add_appointment)
+            self.mini_app.exec_()
             # Добавление записи
+
+    def add_appointment(self):
+        day = self.mini_app.date.strftime('%d %b')
+        sql = [self.mini_app.patients_combo.currentIndex() + 1, self.mini_app.docid,
+               self.mini_app.appointments_input.toPlainText(), self.mini_app.time, day]
+        self.mini_app.con.add_data('appointments', sql)
+        self.mini_app.close()
+        self.new_cell(self.last_r, self.last_c)
 
     def new_cell(self, r, c):
         note = self.database.get_data('appointments', '*')[-1]
