@@ -12,7 +12,6 @@ class PatientsWidget(QDialog):
         self.patients_id = patients_id
         size = (QDesktopWidget().availableGeometry().width(),
                 QDesktopWidget().availableGeometry().height())
-        print(size)
         self.start_x, self.start_y = size[0] // 4, size[1] // 4
         self.end_x, self.end_y = self.start_x * 3, round(self.start_y * 2.5)
         self.resize(*size)
@@ -21,9 +20,6 @@ class PatientsWidget(QDialog):
 
     def initUI(self):
         buttons_name = self.con.get_data("doctors", "DISTINCT position")
-        print(buttons_name)
-        print(self.start_x, self.start_y)
-        print(self.end_x, self.end_y)
         for i, elem in enumerate(buttons_name):
             button = QPushButton(self)
             button.setText(elem[0])
@@ -34,7 +30,6 @@ class PatientsWidget(QDialog):
 
     def doctors(self):
         position = self.sender().text()
-        print(position)
         self.close()
         doctors = CertainDoctor(self.patients_id, position)
         doctors.show()
