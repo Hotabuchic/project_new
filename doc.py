@@ -27,7 +27,6 @@ class DocWidget(QDialog):
         self.table.cellClicked.connect(self.info)
         self.table.cellDoubleClicked.connect(self.new_appoint)
         self.fill_table()
-        # ЗАМЕНИТЬ ПОТОМ НА cellClicked
 
     def new_appoint(self, r, c):
         item = self.table.item(r, c)
@@ -98,7 +97,6 @@ class DocWidget(QDialog):
     def setTableDates(self):
         now = dt.date.today()
         self.datesInStr = []
-        con = DataBase()
         self.dates = [now]
         for i in range(15):
             delta = dt.timedelta(days=i)
