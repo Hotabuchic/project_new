@@ -30,11 +30,14 @@ class Information(QDialog):
         complaint = self.con.get_data("appointments",
                                       "reasons",
                                       "id_patients="
-                                      "(SELECT id FROM patients WHERE surname=? AND name=?)"
+                                      "(SELECT id FROM"
+                                      " patients WHERE"
+                                      " surname=? AND name=?)"
                                       " AND time=? AND day=? AND id_doctors=?",
-                                      (name.split()[0], name.split()[1], time, day, doc_id))[0][0]
+                                      (name.split()[0],
+                                       name.split()[1],
+                                       time, day, doc_id))[0][0]
         self.complaint = QTextEdit(self)
         self.complaint.setText(complaint)
         self.complaint.move(10, 130)
         self.complaint.setEnabled(False)
-

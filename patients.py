@@ -25,8 +25,10 @@ class PatientsWidget(QDialog):
             button.setText(elem[0])
             button.setFont(QFont("Times", 32))
             button.clicked.connect(self.doctors)
-            button.resize(self.end_x - self.start_x, (self.end_y - self.start_y) // 3)
-            button.move(self.start_x, (self.end_y - self.start_y) // 3 * (i + 1) + 25 * i)
+            button.resize(self.end_x - self.start_x,
+                          (self.end_y - self.start_y) // 3)
+            button.move(self.start_x,
+                        (self.end_y - self.start_y) // 3 * (i + 1) + 25 * i)
 
     def doctors(self):
         position = self.sender().text()

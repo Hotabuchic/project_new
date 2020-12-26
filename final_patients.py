@@ -95,12 +95,14 @@ class PatientsFinalWidget(QDialog):
 
         for i in range(self.count):
             delta = dt.timedelta(minutes=time_of_rec)
-            timee = start.strftime('%H:%M') + '-' + (start + delta).strftime('%H:%M')
+            timee = start.strftime('%H:%M') + '-' \
+                                              '' + (start + delta).\
+                strftime('%H:%M')
             start += delta
             self.times.append(timee)
         self.table.setVerticalHeaderLabels(self.times)
         for i in range(len(self.times)):
-            self.table.verticalHeaderItem(i).setBackground(QColor(245, 245, 245))
+            self.table.verticalHeaderItem(i).setBackground(QColor('#F5F5F5'))
         # заполнение времени
 
     def setTableDates(self):
@@ -116,7 +118,7 @@ class PatientsFinalWidget(QDialog):
             self.datesInStr.append(wd + var.strftime(',  %d %b'))
         self.table.setHorizontalHeaderLabels(self.datesInStr)
         for i in range(15):
-            self.table.horizontalHeaderItem(i).setBackground(QColor(245, 245, 245))
+            self.table.horizontalHeaderItem(i).setBackground(QColor('#F5F5F5'))
         self.table.resizeColumnsToContents()
 
     def fill_table(self):
@@ -126,21 +128,27 @@ class PatientsFinalWidget(QDialog):
             minn, maxx = list(map(int, a.split('-')))
             for j in range(len(self.times)):
                 self.table.setItem(j, i, QTableWidgetItem(' '))
-                if not (j in range((minn - self.min_time) * 60 // self.time_of_rec)) and not (
-                        j > (- self.min_time + maxx) * 60 // self.time_of_rec - 1):
+                if not (j in range((minn - self.min_time) * 60 //
+                                   self.time_of_rec)) and not (
+                        j > (- self.min_time + maxx) * 60 //
+                        self.time_of_rec - 1):
                     self.table.item(j, i).setBackground(QColor('#e1e1e1'))
                 else:
                     continue
                 date, time = self.datesInStr[i][5:], self.times[j]
                 a = self.database.get_data('appointments', 'id_patients',
-                                           f'time="{time}" and day="{date}" and id_doctors={self.docId}')
+                                           f'time="{time}" and'
+                                           f' day="{date}" and'
+                                           f' id_doctors={self.docId}')
                 if not a:
                     continue
                 if self.patients_id != a[0][0]:
                     self.table.setItem(j, i, QTableWidgetItem('---'))
                     self.table.item(j, i).setBackground(QColor('#7F8080'))
                     continue
-                a = self.database.get_data('patients', 'surname, name', f'id={a[0][0]}')[0]
-                self.table.setItem(j, i, QTableWidgetItem(f'{a[0]} {a[1]}, {time}, {date}'))
+                a = self.database.get_data('patients', 'surname, name',
+                                           f'id={a[0][0]}')[0]
+                self.table.setItem(j, i, QTableWidgetItem(f'{a[0]} {a[1]},'
+                                                          f' {time}, {date}'))
                 self.table.item(j, i).setBackground(QColor('#FFFC79'))
                 self.table.resizeColumnsToContents()
