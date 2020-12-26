@@ -7,8 +7,6 @@ from appointment import NewAppointment
 from database import DataBase
 from info_for_doc import Information
 
-COLORS = [QColor(0, 213, 124), QColor(255, 252, 121), QColor(0, 150, 255), QColor(148, 55, 255)]
-
 
 class DocWidget(QDialog):
     def __init__(self, doc_id):
@@ -33,14 +31,25 @@ class DocWidget(QDialog):
     def new_appoint(self, r, c):
         item = self.table.item(r, c)
         date, time = self.dates[c + 1], self.times[r]
-        if item.text() == ' ' and item.background().color() == QColor(225, 225, 225):
-            addApp = NewAppointment(time, date, self.docId)
-            addApp.show()
-            addApp.exec_()
-            self.setTableDates()
+        if item.text() == ' ' and item.background().color().name() == '#e1e1e1':
+            add_appointment = NewAppointment(time, date, self.docId)
+            add_appointment.show()
+            add_appointment.exec_()
+            self.new_cell(r, c)
+            # Добавление записи
+
+    def new_cell(self, r, c):
+        note = self.database.get_data('appointments', '*')[-1]
+        full_name = self.database.get_data('patients', 'surname, name', f'id={note[0]}')[0]
+        full_name = ' '.join(full_name)
+        item = f'{full_name}, {note[3]}, {note[-1]}'
+        self.table.setItem(r, c, QTableWidgetItem(item))
+        self.table.item(r, c).setBackground(QColor(255, 252, 121))
+        self.table.resizeColumnsToContents()
 
     def info(self):
         if self.table.currentItem().text() != ' ':
+            print(self.table.currentItem().text())
             data = self.table.currentItem().text().split(", ")
             info = Information(data[0], data[1], data[2], self.docId)
             info.show()
@@ -113,9 +122,10 @@ class DocWidget(QDialog):
 
                 if not (j in range((minn - self.min_time) * 60 // self.time_of_rec)) and not (
                         j > (- self.min_time + maxx) * 60 // self.time_of_rec - 1):
-                    self.table.item(j, i).setBackground(QColor(225, 225, 225))
+                    self.table.item(j, i).setBackground(QColor('#e1e1e1'))
+
                 if self.table.item(j, i).text() != ' ':
-                    self.table.item(j, i).setBackground(QColor(235, 235, 10))
+                    self.table.item(j, i).setBackground(QColor('#FFFC79'))
         self.table.setHorizontalHeaderLabels(lst)
         for i in range(15):
             self.table.horizontalHeaderItem(i).setBackground(QColor(245, 245, 245))

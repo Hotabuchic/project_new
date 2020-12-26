@@ -6,8 +6,6 @@ from PyQt5.QtWidgets import QDialog, QDesktopWidget, QTableWidget, QTableWidgetI
 from appointment import NewAppointment
 from database import DataBase
 
-COLORS = [QColor(0, 213, 124), QColor(255, 252, 121), QColor(0, 150, 255), QColor(148, 55, 255)]
-
 
 class PatientsFinalWidget(QDialog):
     def __init__(self, doc_id, patients_id):
@@ -92,8 +90,9 @@ class PatientsFinalWidget(QDialog):
                                          " = (SELECT id FROM patients)",
                                          (self.times[j], lst[i].split()[1]
                                           + " " + lst[i].split()[2]))
+                # СЮДА ПОДХОДЯТ ВСЕ ЗАПИСИ!!! ДАЖЕ СВОИ!!
                 if len(recording) != 0:
-                    self.table.setItem(j, i, QTableWidgetItem("  "))
+                    self.table.setItem(j, i, QTableWidgetItem("---"))
                 else:
                     self.table.setItem(j, i, QTableWidgetItem(" "))
 
@@ -101,7 +100,7 @@ class PatientsFinalWidget(QDialog):
                         j > (- self.min_time + maxx) * 60 // self.time_of_rec - 1):
                     self.table.item(j, i).setBackground(QColor(225, 225, 225))
                 if self.table.item(j, i).text() != ' ':
-                    self.table.item(j, i).setBackground(QColor(235, 235, 10))
+                    self.table.item(j, i).setBackground(QColor('#7F8080'))
         self.table.setHorizontalHeaderLabels(lst)
         for i in range(15):
             self.table.horizontalHeaderItem(i).setBackground(QColor(245, 245, 245))
