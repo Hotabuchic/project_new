@@ -49,7 +49,8 @@ class PatientsFinalWidget(QDialog):
         r, c = self.last_r, self.last_c
 
         note = self.database.get_data('appointments', '*')[-1]
-        full_name = self.database.get_data('patients', 'surname, name', f'id={self.patients_id}')[0]
+        full_name = self.database.get_data('patients', 'surname, name',
+                                           f'id={self.patients_id}')[0]
         full_name = ' '.join(full_name)
         item = f'{full_name}, {note[3]}, {note[-1]}'
         self.table.setItem(r, c, QTableWidgetItem(item))
@@ -121,7 +122,8 @@ class PatientsFinalWidget(QDialog):
                     continue
                 date, time = self.datesInStr[i][5:], self.times[j]
                 a = self.database.get_data('appointments', 'id_patients',
-                                           f'time="{time}" and day="{date}" and id_doctors={self.docId}')
+                                           f'time="{time}"'
+                                           f' and day="{date}" and id_doctors={self.docId}')
                 if not a:
                     continue
                 if self.patients_id != a[0][0]:

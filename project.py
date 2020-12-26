@@ -4,13 +4,13 @@ from PyQt5 import uic
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QApplication, QMainWindow
 
+from choice import ChoiceWidget
 from database import DataBase
 from doc import DocWidget
 from login import Login
 from password_check import check_password
 from phone_check import check_phone
 from registration import Registration
-from choice import ChoiceWidget
 
 
 class Window(QMainWindow):
@@ -87,7 +87,8 @@ class Window(QMainWindow):
                 return
                 # Проверка поля "Логин" на наличие данных
 
-            elif any([self.reg_patients.login.text().strip() == str(i[1]) for i in self.auth_patients]):
+            elif any([self.reg_patients.login.text().strip() == str(i[1])
+                      for i in self.auth_patients]):
                 self.reg_patients.error.resize(150, 16)
                 self.reg_patients.error.setText("Такой логин уже занят!")
                 self.reg_patients.error.setStyleSheet("color : red")
@@ -123,8 +124,10 @@ class Window(QMainWindow):
                 # Дата рождения
 
                 self.database.add_data("auth_patients(login, password)",
-                                       (self.reg_patients.login.text(), self.reg_patients.password.text()))
-                self.database.add_data("patients(surname, name, patronymic, gender, phone_number, address, birthdate)",
+                                       (self.reg_patients.login.text(),
+                                        self.reg_patients.password.text()))
+                self.database.add_data("patients(surname, name, patronymic,"
+                                       " gender, phone_number, address, birthdate)",
                                        (self.reg_patients.name.text(),
                                         self.reg_patients.surname.text(),
                                         self.reg_patients.patronymic.text(),

@@ -112,8 +112,9 @@ class Registration(QtWidgets.QDialog):
 
         self.setWindowTitle(_translate("self", "Регистрация"))
         self.label_reg.setText(_translate("self", "<html><head/><body><p>"
-                                              "<span style=\" font-size:12pt;\">Регистрация</span>"
-                                              "</p></body></html>"))
+                                                  "<span style=\" font-size:12pt;"
+                                                  "\">Регистрация</span>"
+                                                  "</p></body></html>"))
         self.label_surname.setText(_translate("self", "Фамилия"))
         self.label_name.setText(_translate("self", "Имя"))
         self.label_patronymic.setText(_translate("self", "Отчество"))

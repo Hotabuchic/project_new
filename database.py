@@ -10,8 +10,8 @@ class DataBase:
         self.cur = self.con.cursor()
 
         if data_criterion is not None and criterion != "":
-            request = self.cur.execute(f"SELECT {name_data} FROM {name_tables} WHERE {criterion}",
-                                       data_criterion).fetchall()
+            request = self.cur.execute(f"SELECT {name_data} FROM {name_tables}"
+                                       f" WHERE {criterion}", data_criterion).fetchall()
             self.con.close()
             return request
 
@@ -31,7 +31,8 @@ class DataBase:
             self.cur = self.con.cursor()
 
             question_mark = ", ".join(["?" for _ in range(len(data_criterion))])
-            self.cur.execute(f"INSERT INTO {name_tables} VALUES({question_mark})", data_criterion)
+            self.cur.execute(f"INSERT INTO {name_tables} VALUES({question_mark})",
+                             data_criterion)
 
             self.con.commit()
             self.con.close()

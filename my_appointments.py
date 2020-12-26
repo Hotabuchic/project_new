@@ -28,7 +28,8 @@ class ViewWidget(QDialog):
             self.morph = MorphAnalyzer()
             for appointment in self.appointments:
                 doc_id, time, day = appointment
-                surname, name, position = self.con.get_data("doctors", "surname, name, position")[0]
+                surname, name, position = self.con.get_data("doctors",
+                                                            "surname, name, position")[0]
                 item = QListWidgetItem(f"""
                 Запись к
                 {self.morph.parse(position)[0].inflect({'datv'}).word.capitalize()} 
