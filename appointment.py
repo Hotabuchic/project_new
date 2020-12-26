@@ -7,6 +7,7 @@ class NewAppointment(QDialog):
     def __init__(self, time, date, docId, patients_id=None):
         super().__init__()
         self.resize(400, 360)
+        self.setWindowTitle('Новая запись')
         self.time, self.date, self.docid = time, date, docId
         day = date.strftime('%d %b')
 
@@ -46,11 +47,3 @@ class NewAppointment(QDialog):
         self.add_appointment_btn = QPushButton(self)
         self.add_appointment_btn.move(280, 305)
         self.add_appointment_btn.setText('Создать')
-        self.add_appointment_btn.clicked.connect(self.new_appointment)
-
-    def new_appointment(self):
-        day = self.date.strftime('%d %b')
-        sql = [self.patients_combo.currentIndex() + 1, self.docid,
-               self.appointments_input.toPlainText(), self.time, day]
-        self.con.add_data('appointments', sql)
-        self.close()
