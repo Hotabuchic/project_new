@@ -28,7 +28,8 @@ class NewAppointment(QDialog):
         self.patients_combo = QComboBox(self)
         self.patients_combo.move(115, 65)
         if patients_id is not None:
-            patient = self.con.get_data("patients", 'surname, name, patronymic', "id = ?", (patients_id,))[0]
+            patient = self.con.get_data("patients", 'surname, name, patronymic', "id = ?",
+                                        (patients_id,))[0]
             self.patients_combo.addItem(f'{patient[0]} {patient[1]} {patient[2]}')
             self.patients_combo.setEnabled(False)
         else:

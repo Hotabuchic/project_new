@@ -39,7 +39,6 @@ class DocWidget(QDialog):
             self.mini_app.add_appointment_btn.clicked.connect(self.add_appointment)
             # Добавление записи
 
-
     def add_appointment(self):
         day = self.mini_app.date.strftime('%d %b')
         sql = [self.mini_app.patients_combo.currentIndex() + 1, self.mini_app.docid,
@@ -63,11 +62,6 @@ class DocWidget(QDialog):
             info = Information(data[0], data[1], data[2], self.docId)
             info.show()
             info.exec()
-            # В ячейке где кто-то записан должно быть написано его ФИ, время и день
-            # Формат записи должен быть такой: Иванов Иван, 08:30-08:45, 20 Dec
-            # ОЧЕНЬ ЖЕЛАТЕЛЬНО ЧТОБЫ ВРЕМЯ И ДЕНЬ НЕ БЫЛО ВИДНО В ТАБЛИЦЕ
-            # Ячейка где кто то записан должна быть закрашена красным, свободная - зеленым,
-            # А ячейка в которое время врач не работает - серым цветом
 
     def setTableTime(self):
         time_list = self.database.get_data("doctors", "Monday, Tuesday, Wednesday,"
@@ -134,7 +128,8 @@ class DocWidget(QDialog):
                     continue
                 date, time = self.datesInStr[i][5:], self.times[j]
                 a = self.database.get_data('appointments', 'id_patients',
-                                           f'time="{time}" and day="{date}" and id_doctors={self.docId}')
+                                           f'time="{time}" and'
+                                           f' day="{date}" and id_doctors={self.docId}')
                 if not a:
                     continue
                 a = self.database.get_data('patients', 'surname, name', f'id={a[0][0]}')[0]
