@@ -10,18 +10,21 @@ class DataBase:
         self.cur = self.con.cursor()
 
         if data_criterion is not None and criterion != "":
-            request = self.cur.execute(f"SELECT {name_data} FROM {name_tables} WHERE {criterion}",
+            request = self.cur.execute(f"SELECT {name_data} FROM"
+                                       f" {name_tables} WHERE {criterion}",
                                        data_criterion).fetchall()
             self.con.close()
             return request
 
         elif criterion != "":
-            request = self.cur.execute(f"SELECT {name_data} FROM {name_tables}"
+            request = self.cur.execute(f"SELECT {name_data} FROM "
+                                       f"{name_tables}"
                                        f" WHERE {criterion}").fetchall()
             self.con.close()
             return request
 
-        request = self.cur.execute(f"SELECT {name_data} FROM {name_tables}").fetchall()
+        request = self.cur.execute(f"SELECT {name_data} FROM "
+                                   f"{name_tables}").fetchall()
         self.con.close()
         return request
 
@@ -30,8 +33,10 @@ class DataBase:
             self.con = sqlite3.connect(self.name_database)
             self.cur = self.con.cursor()
 
-            question_mark = ", ".join(["?" for _ in range(len(data_criterion))])
-            self.cur.execute(f"INSERT INTO {name_tables} VALUES({question_mark})", data_criterion)
+            question_mark = ", ".join(["?" for _ in
+                                       range(len(data_criterion))])
+            self.cur.execute(f"INSERT INTO {name_tables} VALUES"
+                             f"({question_mark})", data_criterion)
 
             self.con.commit()
             self.con.close()

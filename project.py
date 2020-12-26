@@ -87,7 +87,8 @@ class Window(QMainWindow):
                 return
                 # Проверка поля "Логин" на наличие данных
 
-            elif any([self.reg_patients.login.text().strip() == str(i[1]) for i in self.auth_patients]):
+            elif any([self.reg_patients.login.text().strip() == str(i[1])
+                      for i in self.auth_patients]):
                 self.reg_patients.error.resize(150, 16)
                 self.reg_patients.error.setText("Такой логин уже занят!")
                 self.reg_patients.error.setStyleSheet("color : red")
@@ -111,24 +112,30 @@ class Window(QMainWindow):
             check_password(self.reg_patients.password.text())
             # Проверка поля "Пароль" на корректность данных
 
-            if self.reg_patients.password.text() != self.reg_patients.password2.text():
+            if self.reg_patients.password.text() != \
+                    self.reg_patients.password2.text():
                 self.reg_patients.error.resize(120, 16)
                 self.reg_patients.error.setText("Пароли не совпадают!")
                 self.reg_patients.error.setStyleSheet("color : red")
                 # Сравнение поля "Пароль" и поля "Повторите пароль"
 
             else:
-                date = list(self.reg_patients.birthdate.selectedDate().getDate())
+                date = list(self.reg_patients.
+                            birthdate.selectedDate().getDate())
                 date2 = " ".join(map(str, date))
                 # Дата рождения
 
                 self.database.add_data("auth_patients(login, password)",
-                                       (self.reg_patients.login.text(), self.reg_patients.password.text()))
-                self.database.add_data("patients(surname, name, patronymic, gender, phone_number, address, birthdate)",
+                                       (self.reg_patients.login.text(),
+                                        self.reg_patients.password.text()))
+                self.database.add_data("patients(surname, name, patronymic,"
+                                       " gender, phone_number, address,"
+                                       " birthdate)",
                                        (self.reg_patients.name.text(),
                                         self.reg_patients.surname.text(),
                                         self.reg_patients.patronymic.text(),
-                                        self.reg_patients.gender.currentText(),
+                                        self.reg_patients.
+                                        gender.currentText(),
                                         self.reg_patients.phone.text(),
                                         self.reg_patients.address.text(),
                                         date2))
@@ -158,12 +165,14 @@ class Window(QMainWindow):
                 id, login, password = patients
                 if self.login_patients.output_login.text() == str(login):
                     # Проверка поля "Логин" на корректность данных
-                    if self.login_patients.output_password.text() == str(password):
+                    if self.login_patients.output_password.text() == \
+                            str(password):
                         self.login_patients.close()
                         self.load_data_for_patients(id_patients=id)
                         break
                     elif self.login_patients.output_password.text() != "":
-                        self.login_patients.error.setText("Неверный пароль!!!")
+                        self.login_patients.error.setText("Неверный "
+                                                          "пароль!!!")
                         self.login_patients.error.setStyleSheet("color : red")
                         break
                     else:

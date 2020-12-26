@@ -1,10 +1,14 @@
 import datetime as dt
 
 from PyQt5.QtGui import QColor
-from PyQt5.QtWidgets import QDialog, QDesktopWidget, QTableWidget, QTableWidgetItem
+from PyQt5.QtWidgets import QDialog, QDesktopWidget, QTableWidget, \
+    QTableWidgetItem
 
 from appointment import NewAppointment
 from database import DataBase
+
+WEEKDAYS = {'Sunday': 'Вс', 'Monday': 'Пн', 'Tuesday': 'Вт', 'Wednesday': 'Ср',
+            'Thursday': 'Чт', 'Friday': 'Пт', 'Saturday': 'Сб'}
 
 
 class PatientsFinalWidget(QDialog):
@@ -21,35 +25,37 @@ class PatientsFinalWidget(QDialog):
         self.table.setColumnCount(15)
         self.database = DataBase()
         self.setTableTime()
-        self.table_trans = {'Sunday': 'Вс', 'Monday': 'Пн', 'Tuesday': 'Вт', 'Wednesday': 'Ср',
-                            'Thursday': 'Чт', 'Friday': 'Пт', 'Saturday': 'Сб'}
         self.setTableDates()
         self.table.setStyleSheet('gridline-color: #6B6B6B')
         self.table.cellDoubleClicked.connect(self.new_appoint)
         self.fill_table()
-        # ЗАМЕНИТЬ ПОТОМ НА cellClicked
 
     def new_appoint(self, r, c):
         item = self.table.item(r, c)
         self.last_r, self.last_c = r, c
         date, time = self.dates[c + 1], self.times[r]
-        if item.text() == ' ' and item.background().color().name() == '#e1e1e1':
-            self.mini_app = NewAppointment(time, date, self.docId, self.patients_id)
+        if item.text() == ' ' and \
+                item.background().color().name() == '#e1e1e1':
+            self.mini_app = NewAppointment(time, date,
+                                           self.docId, self.patients_id)
             self.mini_app.show()
-            self.mini_app.add_appointment_btn.clicked.connect(self.add_appointment)
+            self.mini_app.add_appointment_btn.clicked. \
+                connect(self.add_appointment)
             self.mini_app.exec_()
             # Добавление записи
 
     def add_appointment(self):
         day = self.mini_app.date.strftime('%d %b')
         sql = [self.patients_id, self.mini_app.docid,
-               self.mini_app.appointments_input.toPlainText(), self.mini_app.time, day]
+               self.mini_app.appointments_input.toPlainText(),
+               self.mini_app.time, day]
         self.mini_app.con.add_data('appointments', sql)
         self.mini_app.close()
         r, c = self.last_r, self.last_c
 
         note = self.database.get_data('appointments', '*')[-1]
-        full_name = self.database.get_data('patients', 'surname, name', f'id={self.patients_id}')[0]
+        full_name = self.database.get_data('patients', 'surname, name',
+                                           f'id={self.patients_id}')[0]
         full_name = ' '.join(full_name)
         item = f'{full_name}, {note[3]}, {note[-1]}'
         self.table.setItem(r, c, QTableWidgetItem(item))
@@ -57,10 +63,14 @@ class PatientsFinalWidget(QDialog):
         self.table.resizeColumnsToContents()
 
     def setTableTime(self):
-        time_list = self.database.get_data("doctors", "Monday, Tuesday, Wednesday,"
-                                                      " Thursday, Friday, Saturday, Sunday",
+        time_list = self.database.get_data("doctors",
+                                           "Monday, Tuesday, Wednesday,"
+                                           " Thursday, Friday,"
+                                           " Saturday, Sunday",
                                            "id=?", (self.docId,))[0]
-        time_of_rec = self.database.get_data("doctors", "rec_time", "id=?", (self.docId,))[0][0]
+        time_of_rec = self.database.get_data("doctors",
+                                             "rec_time",
+                                             "id=?", (self.docId,))[0][0]
         self.time_of_rec = time_of_rec
 
         # Нахождение самого раннего и самого позднего начала смены
@@ -80,7 +90,9 @@ class PatientsFinalWidget(QDialog):
 
         start = dt.datetime.combine(dt.date.today(), dt.time(hour=minn))
         self.times = []  # список с временами в строквом виде
-        self.count = (maxx - minn) * 60 // time_of_rec  # максимальное количество строк в таблице
+        self.count = (maxx - minn) * 60 // time_of_rec
+        # максимальное количество строк в таблице
+
         for i in range(self.count):
             delta = dt.timedelta(minutes=time_of_rec)
             timee = start.strftime('%H:%M') + '-' + (start + delta).strftime('%H:%M')
@@ -100,7 +112,7 @@ class PatientsFinalWidget(QDialog):
             var = now + delta
             self.dates.append(var)
             wd = var.strftime('%A')
-            wd = self.table_trans[wd]
+            wd = WEEKDAYS[wd]
             self.datesInStr.append(wd + var.strftime(',  %d %b'))
         self.table.setHorizontalHeaderLabels(self.datesInStr)
         for i in range(15):
