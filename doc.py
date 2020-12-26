@@ -35,17 +35,21 @@ class DocWidget(QDialog):
             add_appointment = NewAppointment(time, date, self.docId)
             add_appointment.show()
             add_appointment.exec_()
-            note = self.database.get_data('appointments', '*')[-1]
-            full_name = self.database.get_data('patients', 'surname, name', f'id={note[1]}')[0]
-            full_name = ' '.join(full_name)
-            item = f'{full_name},{note[3]},{note[-1]}'
-            self.table.setItem(r, c, QTableWidgetItem(item))
-            self.table.item(r, c).setBackground(QColor(255, 252, 121))
-            self.table.resizeColumnsToContents()
-            # # Добавление записи
+            self.new_cell(r, c)
+            # Добавление записи
+
+    def new_cell(self, r, c):
+        note = self.database.get_data('appointments', '*')[-1]
+        full_name = self.database.get_data('patients', 'surname, name', f'id={note[0]}')[0]
+        full_name = ' '.join(full_name)
+        item = f'{full_name}, {note[3]}, {note[-1]}'
+        self.table.setItem(r, c, QTableWidgetItem(item))
+        self.table.item(r, c).setBackground(QColor(255, 252, 121))
+        self.table.resizeColumnsToContents()
 
     def info(self):
         if self.table.currentItem().text() != ' ':
+            print(self.table.currentItem().text())
             data = self.table.currentItem().text().split(", ")
             info = Information(data[0], data[1], data[2], self.docId)
             info.show()

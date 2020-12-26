@@ -4,8 +4,6 @@ from PyQt5.QtWidgets import QDialog, QDesktopWidget, QPushButton
 from certain_doctor import CertainDoctor
 from database import DataBase
 
-COLORS = [QColor(0, 213, 124), QColor(255, 252, 121), QColor(0, 150, 255), QColor(148, 55, 255)]
-
 
 class PatientsWidget(QDialog):
     def __init__(self, patients_id):

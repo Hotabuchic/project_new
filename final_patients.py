@@ -6,8 +6,6 @@ from PyQt5.QtWidgets import QDialog, QDesktopWidget, QTableWidget, QTableWidgetI
 from appointment import NewAppointment
 from database import DataBase
 
-COLORS = [QColor(0, 213, 124), QColor(255, 252, 121), QColor(0, 150, 255), QColor(148, 55, 255)]
-
 
 class PatientsFinalWidget(QDialog):
     def __init__(self, doc_id, patients_id):

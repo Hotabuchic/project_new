@@ -50,7 +50,7 @@ class NewAppointment(QDialog):
 
     def new_appointment(self):
         day = self.date.strftime('%d %b')
-        sql = [self.docid, self.patients_combo.currentIndex() + 1,
+        sql = [self.patients_combo.currentIndex() + 1, self.docid,
                self.appointments_input.toPlainText(), self.time, day]
         self.con.add_data('appointments', sql)
         self.close()
