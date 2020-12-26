@@ -9,20 +9,20 @@ class Information(QDialog):
         self.setGeometry(300, 300, 280, 350)
 
         self.name = QLabel(self)
-        self.name.setText(name)
-        self.name.move(120, 20)
+        self.name.setText(f'Пациент: {name}')
+        self.name.move(10, 20)
 
         self.time = QLabel(self)
-        self.time.setText(time)
-        self.time.move(130, 50)
+        self.time.setText(f'Время\t{time}')
+        self.time.move(10, 50)
 
         self.day = QLabel(self)
-        self.day.setText(day)
-        self.day.move(135, 80)
+        self.day.setText(f'Дата:\t{day}')
+        self.day.move(10, 80)
 
         self.complaint_label = QLabel(self)
         self.complaint_label.setText("Жалобы:")
-        self.complaint_label.move(130, 115)
+        self.complaint_label.move(10, 110)
 
         self.con = DataBase()
 
@@ -34,6 +34,6 @@ class Information(QDialog):
                                       (name.split()[0], name.split()[1], time, day, doc_id))[0][0]
         self.complaint = QTextEdit(self)
         self.complaint.setText(complaint)
-        self.complaint.move(10, 140)
+        self.complaint.move(10, 130)
         self.complaint.setEnabled(False)
 
