@@ -1,4 +1,5 @@
-from PyQt5.QtWidgets import QDialog, QLabel, QComboBox, QPlainTextEdit, QPushButton
+from PyQt5.QtWidgets import QDialog, QLabel, QComboBox, QPlainTextEdit, \
+    QPushButton
 
 from database import DataBase
 
@@ -28,12 +29,15 @@ class NewAppointment(QDialog):
         self.patients_combo = QComboBox(self)
         self.patients_combo.move(115, 65)
         if patients_id is not None:
-            patient = self.con.get_data("patients", 'surname, name, patronymic', "id = ?",
-                                        (patients_id,))[0]
-            self.patients_combo.addItem(f'{patient[0]} {patient[1]} {patient[2]}')
+            patient = self.con.get_data("patients", 'surname, name, '
+                                                    'patronymic',
+                                        "id = ?", (patients_id,))[0]
+            self.patients_combo.addItem(f'{patient[0]} {patient[1]} '
+                                        f'{patient[2]}')
             self.patients_combo.setEnabled(False)
         else:
-            patients = self.con.get_data('patients', 'surname, name, patronymic')
+            patients = self.con.get_data('patients', 'surname, name, '
+                                                     'patronymic')
             for i in range(len(patients)):
                 surname, name, patronymic = patients[i]
                 self.patients_combo.addItem(f'{surname} {name} {patronymic}')

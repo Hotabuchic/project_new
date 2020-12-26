@@ -19,15 +19,17 @@ class CertainDoctor(QDialog):
         self.initUI()
 
     def initUI(self):
-        buttons_name = self.con.get_data("doctors", "surname, name", "position = ?",
-                                         (self.position,))
+        buttons_name = self.con.get_data("doctors", "surname, name",
+                                         "position = ?", (self.position,))
         for i, elem in enumerate(buttons_name):
             button = QPushButton(self)
             button.setText(" ".join(elem))
             button.clicked.connect(self.load)
             button.setFont(QFont("Times", 32))
-            button.resize(self.end_x - self.start_x, (self.end_y - self.start_y) // 3)
-            button.move(self.start_x, (self.end_y - self.start_y) // 3 * (i + 1) + 25 * i)
+            button.resize(self.end_x - self.start_x, (self.end_y -
+                                                      self.start_y) // 3)
+            button.move(self.start_x, (self.end_y - self.start_y)
+                        // 3 * (i + 1) + 25 * i)
 
     def load(self):
         surname, name = self.sender().text().split()
